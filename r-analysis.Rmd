@@ -1,6 +1,17 @@
 ---
-title: "Exploring US Births Data"
-output: html_notebook
+title: "Exploring US Births"
+output:
+  html_notebook:
+    toc: yes
+    toc_float: yes
+  md_document:
+    variant: markdown_strict
+    toc: true
+    toc_depth: 2
+  github_document:
+    html_preview: false
+    toc: true
+    toc_depth: 2
 ---
 
 ```{r global_options, include=FALSE}
@@ -18,6 +29,8 @@ if (!file.exists("data")) {
 
 
 Toggle Hide/Show All Code to get a better viewing pleasure.
+
+## Summary
 
 ```{r}
 file_ssa <- "./data/US_births_2000-2014_SSA.csv"
@@ -60,7 +73,7 @@ sort(unique(births_all$day_of_week))
 ```
 
 
-## What month sees the start of most pregnancies? - look at overall and yearly patterns
+## What month sees the start of most pregnancies? Investigate patterns related to when people are deciding to get pregnant.
 
 It would be nice to find out if most people generally get pregnant in the late fall early winter months as that is the general belief. To keep things simple, we'll assume that all pregnancies last exactly 40 weeks.
 
@@ -117,7 +130,7 @@ ggplot(avg_monthly_births, aes(month_lab, total_births)) +
 ggplot(births_all, aes(month_lab, births, fill=month_lab)) +
      geom_boxplot() +
      guides(fill=FALSE) +
-     labs(y="pregnancies", x="", title="Boxplot of US births - monthly")
+     labs(y="pregnancies", x="", title="Boxplot of US pregnancies - monthly")
 ```
 
 

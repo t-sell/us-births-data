@@ -21,5 +21,5 @@ To save time I have copied the exact description of the data contained in the fi
 
 Links to notebook files:
 
-- [R notebook HTML output](".r-analysis.nb.html")
-- [R notebook source]("r-analysis.Rmd")
+- [R notebook source](r-analysis.Rmd)
+- [R notebook HTML output](r-analysis.nb.html)
