@@ -160,7 +160,8 @@ yearly_births <- births_all %>% group_by(year) %>% summarize(total_births = sum(
 
 ggplot(yearly_births, aes(year, total_births)) +
      geom_bar(stat = "identity", fill=plot_colours[3]) + 
-     labs(y="births", x="year", title="Total US births - yearly")
+     labs(y="births", x="year", title="Total US births - yearly") +
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ![](r-analysis_files/figure-markdown_github/unnamed-chunk-8-1.png)
@@ -175,7 +176,8 @@ monthly_births <- births_all %>% group_by(month_lab) %>% summarize(total_births 
 ggplot(monthly_births, aes(month_lab, total_births)) +
      geom_bar(stat = "identity", fill=plot_colours[1]) + 
      geom_hline(aes(yintercept=median(total_births)), colour=other_colours[2]) +   # median line
-     labs(y="pregnancies", x="", title="Total US pregnancies US - by month")
+     labs(y="pregnancies", x="", title="Total US pregnancies US - by month") + 
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ![](r-analysis_files/figure-markdown_github/unnamed-chunk-9-1.png)
@@ -188,7 +190,8 @@ avg_monthly_median <- median(avg_monthly_births$total_births)
 ggplot(avg_monthly_births, aes(month_lab, total_births)) +
      geom_bar(stat = "identity", fill=plot_colours[2]) + 
      geom_hline(aes(yintercept=avg_monthly_median), colour=other_colours[1]) +   # median line
-     labs(y="pregnancies", x="", title="Average US pregnancies - monthly")
+     labs(y="pregnancies", x="", title="Average US pregnancies - monthly") + 
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ![](r-analysis_files/figure-markdown_github/unnamed-chunk-9-2.png)
@@ -197,7 +200,8 @@ ggplot(avg_monthly_births, aes(month_lab, total_births)) +
 ggplot(births_all, aes(month_lab, births, fill=month_lab)) +
      geom_boxplot() +
      guides(fill=FALSE) +
-     labs(y="pregnancies", x="", title="Boxplot of US pregnancies - monthly")
+     labs(y="pregnancies", x="", title="Boxplot of US pregnancies - monthly") +
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ![](r-analysis_files/figure-markdown_github/unnamed-chunk-10-1.png)
@@ -283,7 +287,8 @@ yearly_births_2 <- births_intersection %>% group_by(year, source) %>% summarize(
 ggplot(yearly_births_2, aes(year, total_births, fill=source)) +
      geom_bar(stat = "identity", position = position_dodge()) + 
      scale_fill_manual(values=plot_colours[c(3,8)]) +
-     labs(y="births", x="year", title="Yearly total US births")
+     labs(y="births", x="year", title="Yearly total US births") +
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ![](r-analysis_files/figure-markdown_github/unnamed-chunk-14-1.png)
@@ -295,7 +300,8 @@ ggplot(avg_monthly_births_2, aes(month, total_births, fill=source)) +
      geom_bar(stat = "identity", position = position_dodge()) + 
      scale_fill_manual(values=plot_colours[c(2,8)]) +
      geom_hline(aes(yintercept=avg_monthly_median), colour=other_colours[4]) +   # median line
-     labs(y="births", x="month", title="Average monthly total US births")
+     labs(y="births", x="month", title="Average monthly total US births") +
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ![](r-analysis_files/figure-markdown_github/unnamed-chunk-14-2.png)
@@ -305,7 +311,8 @@ ggplot(births_intersection, aes(source, births, fill=source)) +
      geom_boxplot() + coord_flip() +
      guides(fill=FALSE) +
      scale_fill_manual(values = other_colours[3:4]) +
-     labs(y="births", x="", title="Boxplot of US births - by source")
+     labs(y="births", x="", title="Boxplot of US births - by source") +
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ![](r-analysis_files/figure-markdown_github/unnamed-chunk-15-1.png)

@@ -2,12 +2,13 @@
 title: "Exploring US Births"
 output:
   html_notebook:
-    toc: yes
-    toc_float: yes
-  md_document:
-    variant: markdown_strict
+    toc: true
+    toc_float: true
+  html_document:
     toc: true
     toc_depth: 2
+    theme: united
+    highlight: tango
   github_document:
     html_preview: false
     toc: true
@@ -101,7 +102,8 @@ yearly_births <- births_all %>% group_by(year) %>% summarize(total_births = sum(
 
 ggplot(yearly_births, aes(year, total_births)) +
      geom_bar(stat = "identity", fill=plot_colours[3]) + 
-     labs(y="births", x="year", title="Total US births - yearly")
+     labs(y="births", x="year", title="Total US births - yearly") +
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ```{r}
@@ -114,7 +116,8 @@ monthly_births <- births_all %>% group_by(month_lab) %>% summarize(total_births 
 ggplot(monthly_births, aes(month_lab, total_births)) +
      geom_bar(stat = "identity", fill=plot_colours[1]) + 
      geom_hline(aes(yintercept=median(total_births)), colour=other_colours[2]) +   # median line
-     labs(y="pregnancies", x="", title="Total US pregnancies US - by month")
+     labs(y="pregnancies", x="", title="Total US pregnancies US - by month") + 
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 
 ### Average number of monthly pregnancies
 avg_monthly_births <- births_all %>% group_by(month_lab) %>% summarize(total_births = mean(births))
@@ -123,14 +126,16 @@ avg_monthly_median <- median(avg_monthly_births$total_births)
 ggplot(avg_monthly_births, aes(month_lab, total_births)) +
      geom_bar(stat = "identity", fill=plot_colours[2]) + 
      geom_hline(aes(yintercept=avg_monthly_median), colour=other_colours[1]) +   # median line
-     labs(y="pregnancies", x="", title="Average US pregnancies - monthly")
+     labs(y="pregnancies", x="", title="Average US pregnancies - monthly") + 
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ```{r}
 ggplot(births_all, aes(month_lab, births, fill=month_lab)) +
      geom_boxplot() +
      guides(fill=FALSE) +
-     labs(y="pregnancies", x="", title="Boxplot of US pregnancies - monthly")
+     labs(y="pregnancies", x="", title="Boxplot of US pregnancies - monthly") +
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 
@@ -205,7 +210,8 @@ yearly_births_2 <- births_intersection %>% group_by(year, source) %>% summarize(
 ggplot(yearly_births_2, aes(year, total_births, fill=source)) +
      geom_bar(stat = "identity", position = position_dodge()) + 
      scale_fill_manual(values=plot_colours[c(3,8)]) +
-     labs(y="births", x="year", title="Yearly total US births")
+     labs(y="births", x="year", title="Yearly total US births") +
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 
 ### compare avearge monthly total births
 avg_monthly_births_2 <- births_intersection %>% group_by(month, source) %>% summarize(total_births = mean(births))
@@ -213,7 +219,8 @@ ggplot(avg_monthly_births_2, aes(month, total_births, fill=source)) +
      geom_bar(stat = "identity", position = position_dodge()) + 
      scale_fill_manual(values=plot_colours[c(2,8)]) +
      geom_hline(aes(yintercept=avg_monthly_median), colour=other_colours[4]) +   # median line
-     labs(y="births", x="month", title="Average monthly total US births")
+     labs(y="births", x="month", title="Average monthly total US births") +
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ```{r}
@@ -221,7 +228,8 @@ ggplot(births_intersection, aes(source, births, fill=source)) +
      geom_boxplot() + coord_flip() +
      guides(fill=FALSE) +
      scale_fill_manual(values = other_colours[3:4]) +
-     labs(y="births", x="", title="Boxplot of US births - by source")
+     labs(y="births", x="", title="Boxplot of US births - by source") +
+     theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 It looks like the birth numbers from the SSA are generally higher than those from the CDC. Something that is worth looking into maybe.

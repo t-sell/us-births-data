@@ -1,3 +1,5 @@
+# Exploring US births
+
 This is my own exploration of the FiveThirtyEight data on US births. The files are location on [github](https://github.com/fivethirtyeight/data/tree/master/births).
 
 To save time I have copied the exact description of the data contained in the files:
@@ -19,7 +21,10 @@ To save time I have copied the exact description of the data contained in the fi
 `births` | Number of births
 
 
+It looks like Github does not surrently support the interactive output format - `r-analysis.nb.html`.
+
 Links to notebook files:
 
-- [R notebook source](r-analysis.Rmd)
-- [R notebook HTML output](r-analysis.nb.html)
+- [Github Markdown](r-analysis.md)
+- [HTML](r-analysis.html)
+- [R notebook](r-analysis.Rmd)
