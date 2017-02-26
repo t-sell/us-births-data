@@ -21,10 +21,8 @@ To save time I have copied the exact description of the data contained in the fi
 `births` | Number of births
 
 
-It looks like Github does not surrently support the interactive output format - `r-analysis.nb.html`.
 
-Links to notebook files:
+When possible, toggle "Hide All Code"/"Show All Code"" to get a better viewing experience.
 
-- [Github Markdown](r-analysis.md)
-- [HTML](r-analysis.html)
-- [R notebook](r-analysis.Rmd)
+
+This is the [Github Markdown](r-analysis.md) output. The [HTML](r-analysis.html) and interactive [R notebook](r-analysis.Rmd) outputs should work locally as well.

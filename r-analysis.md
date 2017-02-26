@@ -3,10 +3,9 @@ Exploring US Births
 
 -   [Summary](#summary)
 -   [Prepare the data](#prepare-the-data)
--   [What month sees the start of most pregnancies? Investigate patterns related to when people are deciding to get pregnant.](#what-month-sees-the-start-of-most-pregnancies-investigate-patterns-related-to-when-people-are-deciding-to-get-pregnant.)
+-   [In general, what month(s) encourage more pregnancies?](#in-general-what-months-encourage-more-pregnancies)
 -   [Compare number of births from the two sets of data for the years 2000 to 2003 - yearly, monthly](#compare-number-of-births-from-the-two-sets-of-data-for-the-years-2000-to-2003---yearly-monthly)
-
-Toggle Hide/Show All Code to get a better viewing pleasure.
+-   [Conclusion](#conclusion)
 
 Summary
 -------
@@ -81,7 +80,7 @@ summary(births2000_2014)
 Prepare the data
 ----------------
 
-First of all, we should visually check to see if the birth numbers match for dates between 2000 and 2003.
+First of all, we should visually check to see if the number of babies born match for dates between 2000 and 2003.
 
 ``` r
 head(subset(births1994_2003, year = 2003), n=3); head(subset(births2000_2014, year = 2003), n=3)
@@ -131,8 +130,10 @@ Clearly the birth numbers vary. We'll merge the dataframes using only the SSA da
 births_all <- rbind(births2000_2014, subset(births1994_2003, year < 2000))
 ```
 
-What month sees the start of most pregnancies? Investigate patterns related to when people are deciding to get pregnant.
-------------------------------------------------------------------------------------------------------------------------
+In general, what month(s) encourage more pregnancies?
+-----------------------------------------------------
+
+Investigate patterns related to when (months, seasons) people decide to get pregnant.
 
 It would be nice to find out if most people generally get pregnant in the late fall early winter months as that is the general belief. To keep things simple, we'll assume that all pregnancies last exactly 40 weeks.
 
@@ -148,19 +149,16 @@ births_all$pregnancy_start <- ymd(full_date_str) - weeks(40)
 
 plot_colours <- brewer.pal(8, "Set2")   # for bar plots
 boxplot_colours <- brewer.pal(9, "YlGn")   # for monthly boxplots
-#brewer.pal.info
 other_colours <- brewer.pal(4, "Dark2")   #
 ```
 
 ``` r
 ### yearly total births
-#births_all$year <- as.factor(births_all$year)
 yearly_births <- births_all %>% group_by(year) %>% summarize(total_births = sum(births))
-#yearly_median <- median(yearly_births$total_births)
 
 ggplot(yearly_births, aes(year, total_births)) +
      geom_bar(stat = "identity", fill=plot_colours[3]) + 
-     labs(y="births", x="year", title="Total US births - yearly") +
+     labs(y="births", x="", title="Yearly total US births") +
      theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
@@ -168,7 +166,6 @@ ggplot(yearly_births, aes(year, total_births)) +
 
 ``` r
 births_all$month_lab <- month(births_all$pregnancy_start, label = TRUE)
-#births_all$month_lab <- NULL
 
 ### Total pregnancies - by month, from 1994 to 2014.
 monthly_births <- births_all %>% group_by(month_lab) %>% summarize(total_births = sum(births))
@@ -176,7 +173,7 @@ monthly_births <- births_all %>% group_by(month_lab) %>% summarize(total_births 
 ggplot(monthly_births, aes(month_lab, total_births)) +
      geom_bar(stat = "identity", fill=plot_colours[1]) + 
      geom_hline(aes(yintercept=median(total_births)), colour=other_colours[2]) +   # median line
-     labs(y="pregnancies", x="", title="Total US pregnancies US - by month") + 
+     labs(y="pregnancies", x="", title="Monthly total US pregnancies") + 
      theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
@@ -184,13 +181,13 @@ ggplot(monthly_births, aes(month_lab, total_births)) +
 
 ``` r
 ### Average number of monthly pregnancies
-avg_monthly_births <- births_all %>% group_by(month_lab) %>% summarize(total_births = mean(births))
-avg_monthly_median <- median(avg_monthly_births$total_births)
+avg_monthly_births <- births_all %>% group_by(month_lab) %>% summarize(avg_births = mean(births))
+avg_monthly_median <- median(avg_monthly_births$avg_births)
 
-ggplot(avg_monthly_births, aes(month_lab, total_births)) +
+ggplot(avg_monthly_births, aes(month_lab, avg_births)) +
      geom_bar(stat = "identity", fill=plot_colours[2]) + 
      geom_hline(aes(yintercept=avg_monthly_median), colour=other_colours[1]) +   # median line
-     labs(y="pregnancies", x="", title="Average US pregnancies - monthly") + 
+     labs(y="pregnancies", x="", title="Monthly average US pregnancies") + 
      theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
@@ -200,13 +197,15 @@ ggplot(avg_monthly_births, aes(month_lab, total_births)) +
 ggplot(births_all, aes(month_lab, births, fill=month_lab)) +
      geom_boxplot() +
      guides(fill=FALSE) +
-     labs(y="pregnancies", x="", title="Boxplot of US pregnancies - monthly") +
+     labs(y="pregnancies", x="", title="Monthly US pregnancies") +
      theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ![](r-analysis_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
-There is a gradual increase in the number of pregnanices as we go from summer to autumn/fall. Looking at the average monthly plot, the fall and winter months (September to January) are the highest above the median line. The average for May is higher than the expected trend, if you look at April and June. This could be explained by the fact that some professions, for example teachers, might not have any other time of the year to do any sort of family planning. The monthly boxplots seem to confirm the general trend of increasing pregnancies starting around August and peaking in December.
+There is a gradual increase in the number of pregnanices as we go from summer to autumn/fall. Looking at the average monthly plot, the fall and winter months (September to January) are the highest above the median line. The average for May is higher than the expected trend, relative to April and June. This could be explained by the fact that some professions, for example teachers, do not have an extended vacation any other time of year.
+
+The monthly boxplots seem to confirm the general trend of increasing pregnancies starting around August and peaking in December.
 
 Compare number of births from the two sets of data for the years 2000 to 2003 - yearly, monthly
 -----------------------------------------------------------------------------------------------
@@ -242,33 +241,33 @@ rm(year_eq, month_eq, month_date_eq, df1, df2)
 
 # rename columns, reshape data, cleanup
 names(births_intersection)[1:4] <- sub("_1", '', names(births_intersection)[1:4])
-names(births_intersection)[5] <- "births_SSA"
-names(births_intersection)[6] <- "births_CDC"
+names(births_intersection)[5] <- "SSA"
+names(births_intersection)[6] <- "CDC"
 
 births_intersection <- melt(births_intersection, id.vars = 1:4, 
                             variable.name = "source", value.name = "births")
 head(births_intersection)
 ```
 
-    ##   year month date_of_month day_of_week     source births
-    ## 1 2000     1             1           6 births_SSA   9083
-    ## 2 2000     1             2           7 births_SSA   8006
-    ## 3 2000     1             3           1 births_SSA  11363
-    ## 4 2000     1             4           2 births_SSA  13032
-    ## 5 2000     1             5           3 births_SSA  12558
-    ## 6 2000     1             6           4 births_SSA  12466
+    ##   year month date_of_month day_of_week source births
+    ## 1 2000     1             1           6    SSA   9083
+    ## 2 2000     1             2           7    SSA   8006
+    ## 3 2000     1             3           1    SSA  11363
+    ## 4 2000     1             4           2    SSA  13032
+    ## 5 2000     1             5           3    SSA  12558
+    ## 6 2000     1             6           4    SSA  12466
 
 ``` r
 tail(births_intersection)
 ```
 
-    ##      year month date_of_month day_of_week     source births
-    ## 2917 2003    12            26           5 births_CDC  10218
-    ## 2918 2003    12            27           6 births_CDC   8646
-    ## 2919 2003    12            28           7 births_CDC   7645
-    ## 2920 2003    12            29           1 births_CDC  12823
-    ## 2921 2003    12            30           2 births_CDC  14438
-    ## 2922 2003    12            31           3 births_CDC  12374
+    ##      year month date_of_month day_of_week source births
+    ## 2917 2003    12            26           5    CDC  10218
+    ## 2918 2003    12            27           6    CDC   8646
+    ## 2919 2003    12            28           7    CDC   7645
+    ## 2920 2003    12            29           1    CDC  12823
+    ## 2921 2003    12            30           2    CDC  14438
+    ## 2922 2003    12            31           3    CDC  12374
 
 ``` r
 year_str <- as.character(births_intersection$year)
@@ -287,7 +286,7 @@ yearly_births_2 <- births_intersection %>% group_by(year, source) %>% summarize(
 ggplot(yearly_births_2, aes(year, total_births, fill=source)) +
      geom_bar(stat = "identity", position = position_dodge()) + 
      scale_fill_manual(values=plot_colours[c(3,8)]) +
-     labs(y="births", x="year", title="Yearly total US births") +
+     labs(y="births", x="", title="Yearly total US births") +
      theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
@@ -295,12 +294,13 @@ ggplot(yearly_births_2, aes(year, total_births, fill=source)) +
 
 ``` r
 ### compare avearge monthly total births
-avg_monthly_births_2 <- births_intersection %>% group_by(month, source) %>% summarize(total_births = mean(births))
-ggplot(avg_monthly_births_2, aes(month, total_births, fill=source)) +
+avg_monthly_births_2 <- births_intersection %>% group_by(month_lab, source) %>%
+     summarize(avg_births = mean(births))
+ggplot(avg_monthly_births_2, aes(month_lab, avg_births, fill=source)) +
      geom_bar(stat = "identity", position = position_dodge()) + 
      scale_fill_manual(values=plot_colours[c(2,8)]) +
      geom_hline(aes(yintercept=avg_monthly_median), colour=other_colours[4]) +   # median line
-     labs(y="births", x="month", title="Average monthly total US births") +
+     labs(y="births", x="", title="Monthly average US births") +
      theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
@@ -311,10 +311,15 @@ ggplot(births_intersection, aes(source, births, fill=source)) +
      geom_boxplot() + coord_flip() +
      guides(fill=FALSE) +
      scale_fill_manual(values = other_colours[3:4]) +
-     labs(y="births", x="", title="Boxplot of US births - by source") +
+     labs(y="births", x="", title="US births by data source") +
      theme(plot.title = element_text(hjust = 0.5))   # center the tile
 ```
 
 ![](r-analysis_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
-It looks like the birth numbers from the SSA are generally higher than those from the CDC. Something that is worth looking into maybe.
+It looks like the birth numbers from the SSA are consistently higher than those from the CDC. This might be worth further investigation.
+
+Conclusion
+----------
+
+There is noticeable increase in pregnancies that start in the fall or early winter months. A lot of the this increase is witnessed in the months of October, November, and December.
